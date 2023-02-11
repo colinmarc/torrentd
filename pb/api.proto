@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option go_package = "github.com/colinmarc/torrentd/pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum TorrentState {
+  INITIALIZING = 0;
+  DOWNLOADING = 1;
+  SEEDING = 2;
+  PAUSED = 3; // TODO
+  DELETED = 4;
+}
+
+message Torrent {
+  message File {
+    string path = 1;
+    int64 size = 2;
+    int64 completed = 3;
+  }
+
+  bytes hash = 1;
+  string hash_hex = 2;
+  string name = 3;
+  google.protobuf.Timestamp started = 4;
+  TorrentState state = 5;
+
+  int64 total_size = 10;
+  int64 total_completed = 11;
+  int64 total_upload = 12;
+  int64 total_download = 13;
+  int64 upload_bps = 14;
+  int64 download_bps = 15;
+  int64 connected_peers = 16;
+
+  repeated File files = 20;
+}
+
+message TorrentList {
+  repeated Torrent torrents = 1;
+}
